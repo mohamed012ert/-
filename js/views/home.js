@@ -46,7 +46,7 @@ window.HomeView = {
       '    <h2 class="teacher-name">م/ محمد مصطفى</h2>' +
       '    <span class="badge-title">Electrical Power Engineer ⚡</span>' +
       '    <p class="teacher-bio">خبرة في تبسيط أعقد المسائل وربطها بالواقع العملي.<br>' +
-      '    <strong>شعارنا:</strong> الفيزياء مش حفظ، الفيزياء حياة.</p>' +
+      '    <strong>شعارنا:</strong> االفهم أولاً.. والدرجة النهائية نتيجة حتمية.</p>' +
       '    <a class="btn btn-whatsapp btn-lg" href="https://wa.me/' + esc(APP_CONFIG.WHATSAPP_NUMBER) + '" target="_blank" rel="noopener">' +
       '      تواصل معنا الآن <i class="fab fa-whatsapp"></i>' +
       '    </a>' +
