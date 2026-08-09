@@ -19,17 +19,13 @@ window.StudentView = {
   _loadCache: function (grade) { return App.Cache.get(this._cacheKey(grade)); },
   _saveCache: function (grade, videos) { App.Cache.set(this._cacheKey(grade), videos); },
 
-  /* نسخة الدروس الحالية المعروضة (للتشغيل داخل الصفحة) */
-  _cachedVideos: [],
-
   render: function () {
     var s = this._getSession();
     if (!s) return this.loginHTML();
 
     var videos = this._loadCache(s.grade);
     var hasCache = !!videos;
-    this._cachedVideos = videos || [];
-    return this._profileHTML(s, this._cachedVideos, !hasCache);
+    return this._profileHTML(s, videos || [], !hasCache);
   },
 
   mount: function (el) {
@@ -140,58 +136,6 @@ window.StudentView = {
         Router.resolve();
       });
     }
-    /* تفويض نقر كروت الدروس → تشغيل الفيديو داخل الصفحة (لا صفحة أخرى للطالب) */
-    var list = el.querySelector('#lesson-list');
-    if (list && !(list.dataset && list.dataset.bound) && typeof list.addEventListener === 'function') {
-      list.dataset = list.dataset || {};
-      list.dataset.bound = '1';
-      list.addEventListener('click', function (e) {
-        var a = e.target.closest('a[href^="#/lesson/"]');
-        if (!a) return;
-        e.preventDefault();
-        var id = decodeURIComponent(a.getAttribute('href').split('/lesson/')[1] || '');
-        var v = (StudentView._cachedVideos || []).find(function (x) { return String(x.id) === String(id); });
-        if (v) { StudentView._playVideo(v); }
-        else { window.location.hash = a.getAttribute('href'); }
-      });
-    }
-  },
-
-  /* تشغيل الدرس في نافذة منبثقة فوق صفحة الطالب (تبقى الصفحة نفسها) */
-  _playVideo: function (v) {
-    this._closeVideo();
-    var modal = document.createElement('div');
-    modal.className = 'video-modal';
-    modal.id = 'student-video-modal';
-    modal.setAttribute('role', 'dialog');
-    modal.setAttribute('aria-modal', 'true');
-    modal.innerHTML =
-      '<div class="video-modal-box">' +
-      '  <div class="video-modal-head">' +
-      '    <h3>' + UI.esc(v.title || 'درس') + '</h3>' +
-      '    <button class="modal-close" data-vclose aria-label="إغلاق"><i class="fas fa-times"></i></button>' +
-      '  </div>' +
-      '  <div class="video-frame">' + UI.videoEmbed(v.youtubeUrl) + '</div>' +
-      '  <div class="video-modal-body">' +
-      (v.description ? UI.esc(v.description) : '<span class="muted small">' + UI.esc(v.unit || '') + '</span>') +
-      '  </div>' +
-      '</div>';
-    document.body.appendChild(modal);
-    if (typeof modal.addEventListener === 'function') {
-      modal.addEventListener('click', function (e) {
-        if (e.target === modal || e.target.closest('[data-vclose]')) StudentView._closeVideo();
-      });
-      document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') StudentView._closeVideo();
-      }, { once: true });
-    }
-    if (document.body && document.body.style) document.body.style.overflow = 'hidden';
-  },
-
-  _closeVideo: function () {
-    var m = document.getElementById('student-video-modal');
-    if (m && typeof m.remove === 'function') m.remove();
-    if (document.body && document.body.style) document.body.style.overflow = '';
   },
 
   /* تحديث خلفي: إحصائيات + دروس في مكانها دون إعادة تحميل */
@@ -230,7 +174,6 @@ window.StudentView = {
       var st2 = StudentView._getSession();
       if (!st2) return;
       StudentView._saveCache(st2.grade, videos);
-      StudentView._cachedVideos = videos;
 
       var list = el.querySelector('#lesson-list');
       if (!list) return;

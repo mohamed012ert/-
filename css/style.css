@@ -889,34 +889,3 @@ h1, h2, h3, h4 { text-wrap: balance; }
   .navbar, .site-footer, .btn, .nav-btn-login { display: none !important; }
   body { background: #fff; }
 }
-
-/* ---------- 33) نافذة تشغيل الفيديو داخل صفحة الطالب ---------- */
-.video-modal {
-  position: fixed; inset: 0; z-index: 1000;
-  display: flex; align-items: center; justify-content: center;
-  background: rgba(15, 23, 42, 0.72); backdrop-filter: blur(3px);
-  padding: 18px; animation: fadeIn 0.2s ease-out;
-}
-.video-modal-box {
-  width: 100%; max-width: 780px;
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius-lg); overflow: hidden;
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.35);
-  animation: modalUp 0.3s ease-out;
-}
-.video-modal-head {
-  display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  padding: 16px 20px; border-bottom: 1px solid var(--border);
-}
-.video-modal-head h3 { color: var(--navy-700); font-size: 1.1rem; margin: 0; }
-.video-frame {
-  position: relative; width: 100%; aspect-ratio: 16 / 9; background: #000;
-}
-.video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
-.video-modal-body { padding: 16px 20px; font-size: 0.95rem; color: var(--gray-700); line-height: 1.7; }
-@media (max-width: 700px) {
-  .video-modal { padding: 10px; }
-  .video-modal-head { padding: 12px 14px; }
-  .video-modal-head h3 { font-size: 0.95rem; }
-  .video-modal-body { padding: 12px 14px; }
-}

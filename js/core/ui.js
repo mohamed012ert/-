@@ -200,14 +200,6 @@ window.UI = (function () {
       '</div>';
   }
 
-  /* إطار فيديو يوتيوب آمن (يستخدم في نافذة التشغيل داخل صفحة الطالب) */
-  function videoEmbed(url) {
-    var embed = App.Media.formatYouTubeEmbedURL(url);
-    if (!embed) return '<div class="empty-state"><i class="fas fa-film"></i><p>لا يمكن تشغيل هذا الدرس الآن.</p></div>';
-    return '<iframe src="' + esc(embed) + '" title="فيديو الدرس" frameborder="0" ' +
-      'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
-  }
-
   /* ---------------------------------------------------------
    * التوافق مع الدوال القديمة (تحافظ على الواجهة العامة)
    * --------------------------------------------------------- */
@@ -230,7 +222,6 @@ window.UI = (function () {
     loginCard: loginCard,
     errorPage: errorPage,
     observeReveals: observeReveals,
-    videoEmbed: videoEmbed,
 
     /* واجهة قديمة متوافقة */
     extractYouTubeId: extractYouTubeId,
