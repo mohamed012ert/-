@@ -21,10 +21,6 @@ window.HomeView = {
       '      <h1>أهلاً بك في منصة <span class="hero-accent">المهندس محمد مصطفى</span></h1>' +
       '      <p class="hero-tagline">' + esc(APP_CONFIG.TAGLINE) + '</p>' +
       '      <p class="hero-quote">"الفهم أولاً.. والدرجة النهائية نتيجة حتمية"</p>' +
-      '  <div class="hero-cta">' +
-      '    <a class="btn btn-primary btn-lg" href="#/?goto=teacher">تعرف على المدرس <i class="fas fa-user-tie"></i></a>' +
-      '    <a class="btn btn-outline btn-lg" href="#/student">تسجيل الدخول <i class="fas fa-sign-in-alt"></i></a>' +
-      '  </div>' +
       '    </div>' +
       '  </div>' +
       '</section>' +
