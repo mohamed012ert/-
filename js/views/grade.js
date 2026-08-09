@@ -22,42 +22,10 @@ window.GradeView = {
       return StudentView.loginHTML(grade ? grade.subtitle : '');
     }
 
-    /* تحديث بيانات الطالب من الخادم (قد يكون الطالب موقوفاً) */
-    var result = await Api.studentLogin(session.code, session.password);
-    if (!result || result.status !== 'success' || !result.data) {
-      App.Session.clearStudent();
-      return StudentView.loginHTML(grade ? grade.subtitle : '');
-    }
-    var student = result.data;
-
-    /* الطالب يرى دروس صفه فقط */
-    if (grade && String(student.grade) !== String(grade.id)) {
-      Router.go('/grade/' + encodeURIComponent(student.grade));
-      return '<div class="state-page"><div class="spinner"></div><p class="muted">جارِ التحويل إلى صفك...</p></div>';
-    }
-
-    var videos = await Api.listVideos({ grade: grade.id });
-    var cards = UI.courseGrid(videos, grade.image);
-
-    var empty = videos.length === 0 ? UI.emptyState('fa-inbox', 'لا توجد دروس منشورة بعد في هذا الصف.', 'ترقّب قريباً...') : '';
-
-    return '' +
-      '<section class="page-hero">' +
-      '  <div class="container">' +
-      '    <h1>' + UI.esc(grade.title) + ' <span class="accent">' + UI.esc(grade.subtitle) + '</span></h1>' +
-      '    <p>أهلاً ' + UI.esc(student.name) + ' — رحلتك نحو التفوق تبدأ من هنا</p>' +
-      '  </div>' +
-      '</section>' +
-
-      '<div class="container section-block">' +
-      UI.sectionHead('دروس ' + grade.subtitle, 'fa-book-open') +
-      empty +
-      cards +
-      '  <div class="row-actions">' +
-      '    <a class="btn btn-primary" href="#/student"><i class="fas fa-chart-line"></i> عرض أدائي</a>' +
-      '    <button class="btn btn-ghost" id="grade-logout-btn"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</button>' +
-      '  </div>' +
-      '</div>';
+    /* الطالب المسجّل: لا توجد صفحة منفصلة له — صفحته الموحّدة
+       (الإحصائيات + المحتوى) هي وجهته الوحيدة دائماً */
+    Router.go('/student');
+    return '<div class="state-page"><div class="spinner"></div><p class="muted">جارِ تحميل صفحتك...</p></div>';
   },
 
   mount: function (el) {

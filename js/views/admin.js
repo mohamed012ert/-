@@ -122,7 +122,7 @@ window.AdminView = {
       '        <div class="field"><label>الصف</label>' +
       '          <select id="f-s-grade" class="input"><option value="s1">الصف الأول الثانوي</option><option value="s2">الصف الثاني الثانوي</option></select></div>' +
       '        <div class="field"><label>الاسم *</label><input id="f-s-name" class="input" required placeholder="اسم الطالب"></div>' +
-      '        <div class="field"><label>كلمة المرور *</label><input id="f-s-password" class="input" required placeholder="كلمة مرور دخول الطالب"></div>' +
+        '        <div class="field"><label>كلمة المرور</label><input id="f-s-password" class="input" placeholder="كلمة مرور دخول الطالب" autocomplete="off"></div>' +
       '        <div class="field"><label>النقاط</label><input id="f-s-points" class="input" type="number" min="0" value="0"></div>' +
       '        <div class="field"><label>مرات الغياب</label><input id="f-s-absences" class="input" type="number" min="0" value="0"></div>' +
       '        <div class="field"><label>مرات عدم تسليم الواجب</label><input id="f-s-homework" class="input" type="number" min="0" value="0"></div>' +
@@ -402,38 +402,42 @@ window.AdminView = {
         '  <td data-label="الكود"><strong>' + UI.esc(x.id) + '</strong></td>' +
         '  <td data-label="الاسم"><strong>' + UI.esc(x.name) + '</strong></td>' +
         '  <td data-label="الصف"><span class="chip ' + (String(x.grade) === 's2' ? 'chip-blue' : 'chip-cyan') + '">' + (String(x.grade) === 's2' ? 'ثانية' : 'أولى') + '</span></td>' +
-        '  <td data-label="النقاط">' + AdminView._qGroup(x, 'points') + '</td>' +
-        '  <td data-label="الغياب">' + AdminView._qGroup(x, 'absences') + '</td>' +
-        '  <td data-label="الواجب">' + AdminView._qGroup(x, 'homework') + '</td>' +
+        '  <td data-label="النقاط" class="q-cell">' + AdminView._qGroup(x, 'points') + '</td>' +
+        '  <td data-label="الغياب" class="q-cell">' + AdminView._qGroup(x, 'absences') + '</td>' +
+        '  <td data-label="الواجب" class="q-cell">' + AdminView._qGroup(x, 'homework') + '</td>' +
         '  <td data-label="الحالة">' + (statusOn ? '<span class="chip chip-green">نشط</span>' : '<span class="chip chip-gray">موقوف</span>') + '</td>' +
         '  <td data-label="إجراءات" class="row-actions">' +
-        '    <button class="icon-btn warning" data-act="edit-s" data-id="' + x.id + '" title="تعديل"><i class="fas fa-edit"></i></button>' +
-        '    <button class="icon-btn danger" data-act="del-s" data-id="' + x.id + '" title="حذف"><i class="fas fa-trash"></i></button>' +
+        '    <button type="button" class="icon-btn warning" data-act="edit-s" data-id="' + x.id + '" title="تعديل"><i class="fas fa-edit"></i></button>' +
+        '    <button type="button" class="icon-btn danger" data-act="del-s" data-id="' + x.id + '" title="حذف"><i class="fas fa-trash"></i></button>' +
         '  </td>' +
         '</tr>';
     }).join('');
 
     var emptyRow = this._students.length === 0 ?
-      '<tr><td colspan="8" class="muted center" style="padding:40px;">لا يوجد طلاب — أضف أول طالب الآن.</td></tr>' : '';
+      '<tr id="empty-students-row"><td colspan="8" class="muted center" style="padding:40px;">لا يوجد طلاب — أضف أول طالب الآن.</td></tr>' : '';
 
     return '' +
       '<div class="table-head">' +
-      '  <h2 class="admin-title">الطلاب <span class="count-pill">' + this._students.length + '</span></h2>' +
-      '  <button class="btn btn-primary" id="add-student-btn"><i class="fas fa-user-plus"></i> إضافة طالب</button>' +
+      '  <h2 class="admin-title">الطلاب <span class="count-pill" id="student-count">' + this._students.length + '</span></h2>' +
+      '  <div class="table-tools">' +
+      '    <input id="student-search" class="input" type="search" placeholder="بحث بالاسم أو الكود..." autocomplete="off">' +
+      '    <button class="btn btn-primary" id="add-student-btn"><i class="fas fa-user-plus"></i> إضافة طالب</button>' +
+      '  </div>' +
       '</div>' +
       '<div class="panel table-panel">' +
-      '  <table class="data-table"><thead><tr><th>الكود</th><th>الاسم</th><th>الصف</th><th>النقاط</th><th>الغياب</th><th>واجب</th><th>الحالة</th><th>إجراءات</th></tr></thead>' +
-      '  <tbody>' + rows + emptyRow + '</tbody></table>' +
+      '  <table class="data-table" id="students-table"><thead><tr><th>الكود</th><th>الاسم</th><th>الصف</th><th>النقاط</th><th>الغياب</th><th>واجب</th><th>الحالة</th><th>إجراءات</th></tr></thead>' +
+      '  <tbody id="students-tbody">' + rows + emptyRow + '</tbody></table>' +
       '</div>';
   },
 
-  /* مجموعة العدّاد السريع (+ / −) */
+  /* مجموعة العدّاد السريع (+ / − / كتابة مباشرة) */
   _qGroup: function (x, field) {
     return '' +
       '<div class="q-group">' +
-      '  <button class="q-btn" data-act="adjust" data-id="' + x.id + '" data-field="' + field + '" data-delta="-1" title="إنقاص">−</button>' +
-      '  <span class="q-value">' + Number(x[field] || 0) + '</span>' +
-      '  <button class="q-btn up" data-act="adjust" data-id="' + x.id + '" data-field="' + field + '" data-delta="1" title="زيادة">+</button>' +
+      '  <button type="button" class="q-btn" data-act="adjust" data-id="' + x.id + '" data-field="' + field + '" data-delta="-1" title="إنقاص" aria-label="إنقاص">−</button>' +
+      '  <input class="q-input" type="number" min="0" step="1" inputmode="numeric" autocomplete="off" value="' + Number(x[field] || 0) + '"' +
+      '         data-act="set-q" data-id="' + x.id + '" data-field="' + field + '" aria-label="تعديل ' + field + '" title="اكتب القيمة مباشرة">' +
+      '  <button type="button" class="q-btn up" data-act="adjust" data-id="' + x.id + '" data-field="' + field + '" data-delta="1" title="زيادة" aria-label="زيادة">+</button>' +
       '</div>';
   },
 
@@ -442,6 +446,21 @@ window.AdminView = {
     if (!main) return;
     var addBtn = main.querySelector('#add-student-btn');
     if (addBtn) addBtn.addEventListener('click', function () { AdminView._openStudentModal(); });
+
+    /* بحث سريع في قائمة الطلاب */
+    var search = main.querySelector('#student-search');
+    if (search) {
+      search.addEventListener('input', function () {
+        var q = search.value.trim().toLowerCase();
+        var any = false;
+        main.querySelectorAll('#students-tbody tr').forEach(function (tr) {
+          if (tr.id === 'empty-students-row') return;
+          var match = tr.textContent.toLowerCase().indexOf(q) !== -1;
+          tr.style.display = match ? '' : 'none';
+          if (match) any = true;
+        });
+      });
+    }
 
     main.querySelectorAll('button[data-act]').forEach(function (btn) {
       var id = btn.getAttribute('data-id');
@@ -455,6 +474,16 @@ window.AdminView = {
         var delta = Number(btn.getAttribute('data-delta'));
         btn.addEventListener('click', function () { AdminView._adjustStudent(id, field, delta); });
       }
+    });
+
+    /* كتابة القيمة مباشرة في الخلية (حفظ فوري عند تغيير القيمة) */
+    main.querySelectorAll('input[data-act="set-q"]').forEach(function (input) {
+      input.addEventListener('change', function () {
+        AdminView._setStudentField(input.getAttribute('data-id'), input.getAttribute('data-field'), input.value);
+      });
+      input.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') input.blur();
+      });
     });
   },
 
@@ -470,7 +499,8 @@ window.AdminView = {
     document.getElementById('f-s-code').disabled = true;
     document.getElementById('f-s-name').value = s ? s.name || '' : '';
     document.getElementById('f-s-grade').value = s ? s.grade || 's1' : 's1';
-    document.getElementById('f-s-password').value = s ? s.password || '' : '';
+    document.getElementById('f-s-password').value = '';
+    document.getElementById('f-s-password').placeholder = s ? 'اتركها فارغة للإبقاء على الحالية' : 'كلمة مرور دخول الطالب';
     document.getElementById('f-s-points').value = s ? Number(s.points || 0) : 0;
     document.getElementById('f-s-absences').value = s ? Number(s.absences || 0) : 0;
     document.getElementById('f-s-homework').value = s ? Number(s.homework || 0) : 0;
@@ -487,6 +517,7 @@ window.AdminView = {
 
   _onStudentSave: async function (e) {
     e.preventDefault();
+    var isEdit = !!this._editingStudentId;
     var data = {
       name: document.getElementById('f-s-name').value.trim(),
       grade: document.getElementById('f-s-grade').value,
@@ -497,24 +528,30 @@ window.AdminView = {
       status: document.getElementById('f-s-status').checked ? 'active' : 'inactive'
     };
 
-    if (!data.name || !data.password) {
-      UI.toast('الاسم وكلمة المرور مطلوبان', 'error');
+    if (!data.name) {
+      UI.toast('الاسم مطلوب', 'error');
+      return;
+    }
+    /* كلمة المرور مطلوبة فقط عند إضافة طالب جديد؛ عند التعديل يُحافظ
+       الخادم على كلمة المرور الحالية إن تُركت فارغة */
+    if (!isEdit && !data.password) {
+      UI.toast('كلمة المرور مطلوبة للطالب الجديد', 'error');
       return;
     }
 
     UI.loading(true);
     try {
       var res;
-      if (this._editingStudentId) {
+      if (isEdit) {
         res = await Api.updateStudent(this._editingStudentId, data);
       } else {
         res = await Api.addStudent(data);
       }
       if (!res || res.status !== 'success') {
-        UI.toast('فشلت العملية — حاول مرة أخرى', 'error');
+        UI.toast('فشلت العملية: ' + ((res && res.message) || 'حاول مرة أخرى'), 'error');
         return;
       }
-      UI.toast(this._editingStudentId ? 'تم تحديث بيانات الطالب' : 'تم إضافة الطالب بنجاح', 'success');
+      UI.toast(isEdit ? 'تم تحديث بيانات الطالب' : 'تم إضافة الطالب بنجاح', 'success');
       this._closeStudentModal();
       this._editingStudentId = null;
       await this._loadStudents();
@@ -527,11 +564,38 @@ window.AdminView = {
     }
   },
 
+  /* تعديل سريع للنقاط/الغياب/الواجب مباشرة من الجدول (بلا فتح نافذة التعديل) */
   _adjustStudent: async function (id, field, delta) {
     var s = this._students.find(function (x) { return String(x.id) === String(id); });
     if (!s) return;
+    this._setStudentField(id, field, Math.max(0, Number(s[field] || 0) + delta));
+  },
 
-    var newVal = Math.max(0, Number(s[field] || 0) + delta);
+  /* حفظ فوري لقيمة الحقل مع تحديث متفائل في مكانه (بدون إعادة تحميل الجدول) */
+  _setStudentField: async function (id, field, raw) {
+    var s = this._students.find(function (x) { return String(x.id) === String(id); });
+    if (!s) return;
+
+    var newVal = Math.max(0, Math.floor(Number(raw) || 0));
+    var old = Number(s[field] || 0);
+
+    var main = document.getElementById('admin-main');
+    var inputEl = (main && typeof main.querySelector === 'function')
+      ? main.querySelector('input[data-act="set-q"][data-id="' + id + '"][data-field="' + field + '"]')
+      : null;
+
+    if (newVal === old) {
+      if (inputEl) inputEl.value = newVal;
+      return;
+    }
+
+    /* تحديث متفائل: القيمة تظهر فوراً ثم تُحفظ */
+    s[field] = newVal;
+    if (inputEl) {
+      inputEl.value = newVal;
+      inputEl.classList.add('saving');
+    }
+
     var data = {
       name: s.name || '',
       grade: s.grade || 's1',
@@ -543,12 +607,32 @@ window.AdminView = {
     };
 
     try {
-      await Api.updateStudent(id, data);
-      await this._loadStudents();
-      this.showTab('students');
+      var res = await Api.updateStudent(id, data);
+      if (!res || res.status !== 'success') {
+        /* الخادم رفض العملية — إرجاع القيمة السابقة وإظهار الخطأ الحقيقي */
+        s[field] = old;
+        if (inputEl) {
+          inputEl.value = old;
+          inputEl.classList.remove('saving');
+          inputEl.classList.add('saved');
+          setTimeout(function () { if (inputEl.classList) inputEl.classList.remove('saved'); }, 1200);
+        }
+        UI.toast('فشل الحفظ: ' + ((res && res.message) || 'الخادم رفض العملية'), 'error');
+        return;
+      }
+      if (inputEl) {
+        inputEl.classList.remove('saving');
+        inputEl.classList.add('saved');
+        setTimeout(function () { if (inputEl.classList) inputEl.classList.remove('saved'); }, 900);
+      }
     } catch (err) {
       console.error(err);
-      UI.toast('فشل التعديل', 'error');
+      s[field] = old;
+      if (inputEl) {
+        inputEl.value = old;
+        inputEl.classList.remove('saving');
+      }
+      UI.toast('فشل الحفظ — حاول مرة أخرى', 'error');
     }
   },
 

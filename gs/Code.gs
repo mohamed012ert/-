@@ -318,15 +318,23 @@ function addStudent(data) {
 }
 
 function updateStudent(id, data) {
-  validateStudent(data);
+  if (!data || typeof data !== 'object') throw new Error('missing_student');
+  if (!data.name || !String(data.name).trim()) throw new Error('missing_name');
+
   var sheet = getStudentSheet();
   var rowIndex = findStudentRow(sheet, id);
   if (rowIndex < 0) throw new Error('student_not_found');
 
+  /* الحفاظ على كلمة المرور الحالية إن لم تُرسل (قوائم لوحة التحكم
+     لا تحتوي كلمات المرور — تُحذف لأسباب أمنية عبر stripPassword) */
+  var password = (data.password && String(data.password).trim())
+    ? data.password
+    : String(sheet.getRange(rowIndex, 3).getValue());
+
   var values = [
     Number(id),
     (data && data.name) || '',
-    (data && data.password) || '',
+    password,
     (data && data.grade) || 's1',
     Number((data && data.points) || 0),
     Number((data && data.absences) || 0),

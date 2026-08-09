@@ -6,7 +6,7 @@ window.APP_CONFIG = {
 
   /* رابط Web App بعد نشر Google Apps Script كتطبيق ويب (وصول: أي شخص) */
   /* مثال: https://script.google.com/macros/s/AKfycb.../exec */
-  API_URL: 'https://script.google.com/macros/s/AKfycbwy8zyMyFNUuLq6s0B4W5iC2aHKjVPGU5MgNZHubiF0_u6SeDZ19IFxodYWIBUwaGvY3A/exec',
+  API_URL: 'https://script.google.com/macros/s/AKfycbzjhslipZL3duA4wznE_leVY21jWBe8jTuu9Z9TiTdJ9XSwS-luBUQXDQcoEuFoxdM60w/exec',
 
   /* كلمة مرور الدخول إلى لوحة التحكم (غيّرها فوراً) */
   ADMIN_PASSWORD: '123456',
