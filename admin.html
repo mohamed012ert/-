@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="theme-color" content="#1a2980">
+    <title>لوحة التحكم — المهندس محمد مصطفى</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+
+    <!-- شريط علوي بسيط خاص بلوحة التحكم -->
+    <nav class="navbar">
+        <div class="container nav-inner">
+            <a class="navbar-brand" href="./admin.html">
+                <img src="./imgs/kh.png" alt="الشعار" loading="lazy" onerror="this.style.display='none'">
+                <span>لوحة التحكم</span>
+            </a>
+            <div class="nav-links">
+                <a class="nav-btn-login" href="./index.html" target="_blank"><i class="fas fa-globe"></i> عرض الموقع</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- حاوية العرض: تُرسم هنا لوحة التحكم -->
+    <div id="app"></div>
+
+    <!-- مؤشر تحميل عام -->
+    <div id="app-loader" aria-hidden="true">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- حاوية الإشعارات (Toast) -->
+    <div id="toast-container"></div>
+
+    <!-- سكربتات لوحة التحكم فقط -->
+    <script src="./js/config.js"></script>
+    <script src="./js/core/utils.js"></script>
+    <script src="./js/core/storage.js"></script>
+    <script src="./js/core/media.js"></script>
+    <script src="./js/core/dom.js"></script>
+    <script src="./js/core/ui.js"></script>
+    <script src="./js/core/router.js"></script>
+    <script src="./js/services/http.js"></script>
+    <script src="./js/services/cache.js"></script>
+    <script src="./js/services/session.js"></script>
+    <script src="./js/services/api.js"></script>
+    <script src="./js/views/admin.js"></script>
+    <script src="./js/admin-app.js"></script>
+</body>
+</html>

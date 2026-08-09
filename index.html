@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="منصة المهندس محمد مصطفى للعلوم المتكاملة والفيزياء — شرح تفصيلي، بنك أسئلة، ومتابعة دورية لطلاب الثانوية.">
+    <meta name="theme-color" content="#1a2980">
+    <title>المهندس محمد مصطفى | منصة العلوم المتكاملة والفيزياء</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+
+    <!-- شاشة ترحيبية تغطي الصفحة كاملة (تُخفى بعد التحميل ولا تُبقي أثراً) -->
+    <div id="splash-screen" aria-hidden="false">
+        <div class="splash-inner">
+            <div class="splash-logo">
+                <img src="./imgs/kh.png" alt="شعار المنصة" onerror="this.style.display='none'">
+            </div>
+            <div class="splash-title">المهندس محمد مصطفى</div>
+            <div class="splash-sub">العلوم المتكاملة والفيزياء</div>
+            <div class="splash-bar"><span class="splash-bar-fill"></span></div>
+            <div class="splash-atom"><i class="fas fa-atom"></i></div>
+        </div>
+    </div>
+
+    <!-- شريط التنقل الثابت (لا يُعاد تحميله مع التنقل) -->
+    <nav class="navbar">
+        <div class="container nav-inner">
+            <a class="navbar-brand" href="#/">
+                <img src="./imgs/kh.png" alt="الشعار" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='./imgs/1.jpg'">
+                <span>المهندس محمد مصطفى</span>
+            </a>
+            <button class="nav-toggle" id="nav-toggle" aria-label="فتح القائمة">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="nav-links" id="nav-links">
+                <a class="nav-link" data-nav="/" href="#/">الرئيسية</a>
+                <a class="nav-link" href="#/?goto=teacher" data-goto="teacher">اتصل بنا / عن المدرس</a>
+                <a class="nav-btn-login" href="#/student"><i class="fas fa-sign-in-alt"></i> تسجيل الدخول</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- حاوية العرض: تُرسم هنا كل صفحات التطبيق حسب المسار -->
+    <div id="app"></div>
+
+    <footer class="site-footer">
+        <p>جميع الحقوق محفوظة &copy; 2026 | منصة <strong>المهندس محمد مصطفى</strong></p>
+        <div class="social-links">
+            <a href="#" aria-label="فيسبوك"><i class="fab fa-facebook fa-lg"></i></a>
+            <a href="#" aria-label="يوتيوب"><i class="fab fa-youtube fa-lg"></i></a>
+        </div>
+    </footer>
+
+    <!-- مؤشر تحميل عام -->
+    <div id="app-loader" aria-hidden="true">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- حاوية الإشعارات (Toast) -->
+    <div id="toast-container"></div>
+
+    <!-- سكربتات التطبيق (الترتيب مهم: النواة ← الخدمات ← الصفحات) -->
+    <script src="./js/config.js"></script>
+    <script src="./js/core/utils.js"></script>
+    <script src="./js/core/storage.js"></script>
+    <script src="./js/core/media.js"></script>
+    <script src="./js/core/dom.js"></script>
+    <script src="./js/core/ui.js"></script>
+    <script src="./js/core/router.js"></script>
+    <script src="./js/core/splash.js"></script>
+    <script src="./js/services/http.js"></script>
+    <script src="./js/services/cache.js"></script>
+    <script src="./js/services/session.js"></script>
+    <script src="./js/services/api.js"></script>
+    <script src="./js/views/home.js"></script>
+    <script src="./js/views/grade.js"></script>
+    <script src="./js/views/lesson.js"></script>
+    <script src="./js/views/student.js"></script>
+    <script src="./js/app.js"></script>
+</body>
+</html>
