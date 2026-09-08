@@ -61,7 +61,7 @@ window.StudentView = {
         UI.toast('أدخل الكود وكلمة المرور', 'error');
         return;
       }
-      UI.loading(true);
+      UI.loading(true, { student: true });
       return Api.studentLogin(code.value.trim(), pass.value.trim()).then(function (result) {
         if (result && result.status === 'success' && result.data) {
           StudentView._setSession(code.value.trim(), pass.value.trim(), result.data);

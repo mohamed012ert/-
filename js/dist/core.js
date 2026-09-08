@@ -423,21 +423,25 @@ window.UI = (function () {
    * مؤشر التحميل العام (مع عدّاد لتوازن النداءات المتداخلة)
    * --------------------------------------------------------- */
   var loadCount = 0;
+  var loadStudent = false;
 
-  function loading(show) {
+  function loading(show, opts) {
     loadCount = Math.max(0, loadCount + (show ? 1 : -1));
     var el = document.getElementById('app-loader');
     if (!el) return;
+    if (opts && typeof opts.student === 'boolean') loadStudent = opts.student;
     var on = loadCount > 0;
     el.style.display = on ? 'flex' : 'none';
     el.setAttribute('aria-hidden', on ? 'false' : 'true');
+    el.setAttribute('data-student', on && loadStudent ? '1' : '0');
   }
 
   /* إعادة ضبط قسرية للمؤشر (حالة طوارئ) */
   function loadingReset() {
     loadCount = 0;
+    loadStudent = false;
     var el = document.getElementById('app-loader');
-    if (el) { el.style.display = 'none'; el.setAttribute('aria-hidden', 'true'); }
+    if (el) { el.style.display = 'none'; el.setAttribute('aria-hidden', 'true'); el.setAttribute('data-student', '0'); }
   }
 
   /* ---------------------------------------------------------
@@ -773,9 +777,9 @@ window.Router = {
 
   var start = Date.now();
   function schedule() {
-    /* تُخفى بعد أقل من ثانية من اكتمال التحميل — ترحيب سريع
-       دون إبقاء المستخدم منتظراً خلف شاشة حاجبة */
-    var wait = Math.max(0, 600 - (Date.now() - start));
+    /* تُخفى بعد ~1.6 ثانية من اكتمال التحميل — مدة متوازنة تتيح مشاهدة
+       أنيميشن الترحيب دون إبطاء دخول الطالب للمحتوى */
+    var wait = Math.max(0, 1600 - (Date.now() - start));
     setTimeout(hide, wait);
   }
 
@@ -786,6 +790,6 @@ window.Router = {
   }
 
   /* مهلة قصوى احتياطية (لا تُبقى الشاشة حاجبة الصفحة أبداً) */
-  setTimeout(hide, 1600);
+  setTimeout(hide, 3000);
 })();
 
