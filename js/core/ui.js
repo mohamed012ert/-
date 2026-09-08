@@ -206,7 +206,8 @@ window.UI = (function () {
   function extractYouTubeId(input) { return App.Media.extractYouTubeId(input); }
   function youtubeIdFromUrl(url)   { return App.Media.extractYouTubeId(url); }
   function formatYouTubeEmbedURL(url) { return App.Media.formatYouTubeEmbedURL(url); }
-  function toEmbedUrl(url)         { return App.Media.formatYouTubeEmbedURL(url); }
+  function formatEmbedURL(url)     { return App.Media.formatEmbedURL(url); }
+  function toEmbedUrl(url)         { return App.Media.formatEmbedURL(url); }
   function thumbnail(url, fallback) { return App.Media.thumbnail(url, fallback); }
 
   return {
@@ -227,6 +228,7 @@ window.UI = (function () {
     extractYouTubeId: extractYouTubeId,
     youtubeIdFromUrl: youtubeIdFromUrl,
     formatYouTubeEmbedURL: formatYouTubeEmbedURL,
+    formatEmbedURL: formatEmbedURL,
     toEmbedUrl: toEmbedUrl,
     thumbnail: thumbnail
   };

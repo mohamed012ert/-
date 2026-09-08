@@ -53,13 +53,15 @@ window.HomeView = {
       '  </div>' +
       '</div>';
 
-    /* ---------- 3) لوحة الشرف (تُملأ في الخلفية) ---------- */
-    var leaderboard =
+    /* ---------- 3) لوحة الشرف (قابلة للتفعيل عبر ENABLE_LEADERBOARD —
+       الكود محفوظ لكنه لا يُرسم ولا يتصل بالخادم عند التعطيل) ---------- */
+    var leaderboard = APP_CONFIG.ENABLE_LEADERBOARD ? (
       '<div class="container">' +
       UI.sectionHead('لوحة الشرف', 'fa-trophy') +
       '  <p class="center muted small" style="margin-bottom:20px;">أعلى الطلاب تميزاً حسب إجمالي النقاط</p>' +
       '  <div class="leaderboard" id="lb-list"></div>' +
-      '</div>';
+      '</div>'
+    ) : '';
 
     /* ---------- 4) المراحل الدراسية ---------- */
     var grades = (APP_CONFIG.GRADES || []).map(function (g) {
@@ -111,12 +113,18 @@ window.HomeView = {
       }, 100);
     }
 
-    /* لوحة الشرف */
+    /* لوحة الشرف — لا تُحمَّل من الخادم إطلاقاً عند التعطيل */
+    if (!APP_CONFIG.ENABLE_LEADERBOARD) return;
+
     try {
       var students = await Api.leaderboard(10);
       var box = el.querySelector('#lb-list');
-      if (box && students && students.length) {
-        box.innerHTML = HomeView._leaderboardRows(students);
+      if (box) {
+        if (students && students.length) {
+          box.innerHTML = HomeView._leaderboardRows(students);
+        } else {
+          box.innerHTML = '<p class="center muted small" style="padding:24px;">لا توجد بيانات معروضة بعد — ستظهر الأسماء عند إضافة طلاب حقيقيين من لوحة التحكم.</p>';
+        }
       }
     } catch (e) { /* تجاهل */ }
   }

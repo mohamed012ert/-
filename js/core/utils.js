@@ -48,10 +48,10 @@ App.Utils = (function () {
     };
   }
 
-  /* تأخير وهمي للبيانات الاحتياطية (يحاكي زمن الشبكة) */
+  /* تأخير وهمي قصير للبيانات الاحتياطية (يمنع وميض التبديل الفوري) */
   function delay(data, ms) {
     return new Promise(function (resolve) {
-      setTimeout(function () { resolve(data); }, ms || 350);
+      setTimeout(function () { resolve(data); }, ms || 60);
     });
   }
 

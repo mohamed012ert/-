@@ -10,7 +10,7 @@ window.App = window.App || {};
 
 App.Http = (function () {
 
-  var TIMEOUT = 12000;
+  var TIMEOUT = 9000;
 
   /* خطأ مصنّف بمعلومات مفيدة */
   function HttpError(name, message) {

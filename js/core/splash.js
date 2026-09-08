@@ -14,14 +14,14 @@
     el.classList.add('splash-leave');
     setTimeout(function () {
       if (el.parentNode) el.parentNode.removeChild(el);
-    }, 600);
+    }, 500);
   }
 
   var start = Date.now();
   function schedule() {
-    /* تُخفى بعد 2.4 ثانية من اكتمال التحميل — وقت كافٍ لعرض
-       الأنيميشن والإحساس بالترحيب دون إبقاء المستخدم منتظراً */
-    var wait = Math.max(0, 2400 - (Date.now() - start));
+    /* تُخفى بعد أقل من ثانية من اكتمال التحميل — ترحيب سريع
+       دون إبقاء المستخدم منتظراً خلف شاشة حاجبة */
+    var wait = Math.max(0, 600 - (Date.now() - start));
     setTimeout(hide, wait);
   }
 
@@ -32,5 +32,5 @@
   }
 
   /* مهلة قصوى احتياطية (لا تُبقى الشاشة حاجبة الصفحة أبداً) */
-  setTimeout(hide, 4800);
+  setTimeout(hide, 1600);
 })();

@@ -11,22 +11,36 @@ window.LessonView = {
   title: function () { return 'درس الفيديو'; },
 
   render: async function (params) {
-    var videos = await Api.listVideos({ includeHidden: true });
-    var video = videos.find(function (v) { return String(v.id) === String(params.id); }) || videos[0];
+    var isAdmin = App.Session.isAdmin();
+    var session = App.Session.getStudent();
+
+    /* جلب النطاق المناسب فقط:
+       - الأدمن: كل الدروس (بما فيها المخفية) للمعاينة
+       - الطالب: دروس صفه من الكاش (عرض أسرع بكثير)
+       - الزائر: الدروس المنشورة عامة */
+    var videos = await Api.listVideos(isAdmin
+      ? { includeHidden: true }
+      : (session ? { grade: session.grade } : {}));
+
+    var video = videos.find(function (v) { return String(v.id) === String(params.id); });
+
+    /* الكاش قد يكون قديماً ولا يضم درساً جديداً → طلب طازج مرة واحدة */
+    if (!video && session && !isAdmin) {
+      videos = await Api.listVideos({ grade: session.grade, fresh: true });
+      video = videos.find(function (v) { return String(v.id) === String(params.id); });
+    }
 
     if (!video) {
       return '' +
         '<div class="state-page">' +
         '  <i class="fas fa-question-circle state-icon"></i>' +
-        '  <h2>الدرس غير موجود</h2>' +
+        '  <h2>الدرس غير متاح</h2>' +
+        '  <p class="muted">هذا الدرس غير موجود أو أُزيل، أو ليس ضمن دروس صفك.</p>' +
         '  <a class="btn btn-primary mt-4" href="#/">العودة للرئيسية</a>' +
         '</div>';
     }
 
-    var isAdmin = App.Session.isAdmin();
-
     if (!isAdmin) {
-      var session = App.Session.getStudent();
       if (!session) {
         return '' +
           '<div class="state-page">' +
@@ -48,7 +62,7 @@ window.LessonView = {
       }
     }
 
-    var embed = UI.formatYouTubeEmbedURL(video.youtubeUrl);
+    var embed = UI.formatEmbedURL(video.youtubeUrl);
 
     var pdfBtn = video.pdfUrl ? '' +
       '<a class="btn btn-pdf btn-block" href="' + UI.esc(video.pdfUrl) + '" target="_blank" rel="noopener">' +
